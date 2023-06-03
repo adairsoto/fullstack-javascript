@@ -5,4 +5,4 @@ import App from "./components/App";
 const container = document.getElementById('root');
 const root = createRoot(container);
 
-root.render(<App initialContests={window.initialData.contests}/>);
+root.render(<App initialData={window.initialData}/>);
