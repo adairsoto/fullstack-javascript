@@ -1,29 +1,36 @@
 import express from 'express';
-import data from '../src/testData'
+import { MongoClient } from 'mongodb';
+import assert from 'assert';
+import config from '../config'
 
-// process.on('uncaughtException', function (err) {
-//     console.log(err);
-// });
+const client = new MongoClient(config.mongodbUrl);
 
+client.connect();
+
+let contestsResult = {};
+
+const db = client.db(config.dbName);
 const router = express.Router();
-
-const contests = data.contests.reduce((obj, contest) => {
-        obj[contest.id] = contest;
-        return obj;
-        }, {}); 
+const collection = db.collection('contests');
+const findResult = collection.find({}).project({
+                        id: 1,
+                        categoryName: 1,
+                        contestName: 1
+                    }).toArray();
+findResult.then(function(result) {
+    contestsResult = result;
+});
 
 router.get('/contests', (req, res) => {
-    res.send({ 
-        contests: contests 
+    let contests = {};
+    contestsResult.forEach(contest => {
+        contests[contest.id] = contest;
     });
+    res.send(contests);
 });
 
 router.get('/contests/:contestId', (req, res) => {
-    let contest = contests[req.params.contestId];
-    contest.description = 'Lorem ipsum dolor ist';
-    
-    res.send(contest);
+
 });
 
 export default router;
-

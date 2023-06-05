@@ -20,7 +20,6 @@ const getInitialData = (contestId, apiData) => {
             }
         }
     }
-    
     return {
         contests: apiData.contests
     }

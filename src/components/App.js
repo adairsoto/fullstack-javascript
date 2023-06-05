@@ -68,7 +68,6 @@ class App extends React.Component {
         if (this.state.currentContestId) {
             return this.currentContest().contestName;
         }
-
         return 'Naming Contests';
     }
 
